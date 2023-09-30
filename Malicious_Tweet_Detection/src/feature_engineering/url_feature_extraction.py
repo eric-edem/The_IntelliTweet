@@ -65,9 +65,6 @@ class CheckUrlFeature():
             print("err_having_At_Symbol", e)
             return 0
 
-    def double_slash_redirecting(url):
-        return -1
-
     def Prefix_Suffix(url):
         try:
             subDomain, domain, suffix, e = extract(url)
@@ -401,7 +398,6 @@ def run(url):
     data['check_connection'] = CheckUrlFeature.check_connection(urll)
     data['having_IP_Address'] = CheckUrlFeature.having_IP_Address(urll)
     data['having_At_Symbol'] = CheckUrlFeature.having_At_Symbol(urll)
-    data['double_slash_redirecting'] = CheckUrlFeature.double_slash_redirecting(urll)
     data['Prefix_Suffix'] = CheckUrlFeature.Prefix_Suffix(urll)
     data['having_Sub_Domain'] = CheckUrlFeature.having_Sub_Domain(urll)
     data['Domain_registeration_length'] = CheckUrlFeature.Domain_registeration_length(urll)
