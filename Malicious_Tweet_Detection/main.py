@@ -8,13 +8,13 @@ from  src.feature_engineering.url_feature_extraction import CheckUrlFeature,run,
 from src.models import textAnalyst, Modelling
 from data_collection import text_preprocessor
 from tldextract import extract
+theIntellitweet = joblib.load('saved_models/intelliTweetModel.pkl')
 
 # main.py
 def run_Validate_IntelliTweet():
     return validationIntellitweet.main()
-
 # run_Validate_IntelliTweet()
-print(feature_columns)
+
 def read_api_credentials(file_path):
     credentials = {}
     with open(file_path, 'r') as file:
@@ -33,35 +33,32 @@ def read_path(file_path):
 
 
 def main():
-    # Read API credentials from a file
+    #This portion crawls Twitter and fetches tweets
+    
+    #Read your API credentials from zprops file
     api_credentials_file = "zprops/api_credentials"
     api_credentials = read_api_credentials(api_credentials_file)
-
-    # Extract API credentials from the dictionary
     api_key = api_credentials['API_KEY']
     api_key_secret = api_credentials['API_KEY_SECRET']
     access_token = api_credentials['ACCESS_TOKEN']
     access_token_secret = api_credentials['ACCESS_TOKEN_SECRET']
 
-    # Initialize objects and call functions from different modules
+    # Crawl Twitter
     detector = TwitterCrawller(api_key, api_key_secret, access_token, access_token_secret)
-    # detector.authenticate()
+    # detector.authenticate() #Uncommented this part once you have your credentials set up 
 
-    # Define your query and the number of tweets to fetch
+    # Define your keywords as a query and the number of tweets to fetch
     query = "phishing"  # Modify the query as needed
     num_tweets = 100  # Modify the number of tweets to fetch as needed
 
     # Fetch and analyze tweets using MaliciousTweetDetector
-    # detector.fetch_tweets(query, num_tweets)
+    # detector.fetch_tweets(query, num_tweets) #Uncommented this part once you have your credentials set up 
 
 #Getting Twitter features
-    # twitter_data = detector.fetch_tweets(query, num_tweets)
-
-    # Create an instance of SomeClass1 from other_module1
+    # twitter_data = detector.fetch_tweets(query, num_tweets)  #Uncommented this part once you have your credentials set up 
     data_paths = read_path("zprops/paths")
-    print(data_paths)
     # value = data_paths['test_tweet_path']
-    twitter_data = pd.read_csv('tests/single_tweet_test.csv')
+    twitter_data = pd.read_csv('tests/single_tweet_test.csv') #For test purposes if you dont have twitter credentials
 
 #Getting UrlFeatures
     url_tests = []
@@ -115,29 +112,11 @@ def main():
     twitter_data['subjectivity'] = sub
     twitter_data['polarity'] = pol
 
-
-    # sentiment_label = myTextAnalyst.analyze_sentiment(text= str(list(twitter_data.Full_Text)[0]))
-    #
-    # # Calculate subjectivity and polarity
-    # subjectivity, polarity = myTextAnalyst.calculate_subjectivity_polarity(text= str(list(twitter_data.Full_Text)[0]))
-    #
-    # # Calculate mean TF-IDF values Tweet_data1['Full_Text'].apply(preprocess_data).apply(text_Analysis))
-    # mean_tfidf_values = myTextAnalyst.calculate_mean_tfidf(twitter_data['Full_Text'].apply(text_preprocessor.preprocess_data))
-    #
-    # twitter_data['sentiment_label']= sentiment_label
-    # twitter_data['subjectivity']= subjectivity
-    # twitter_data['polarity']= polarity
-    # twitter_data['TFIDF']= mean_tfidf_values
-
 #Getting All Features
     resultdata = pd.concat([twitter_data, twitter_Url_test1], axis=1)
     print(resultdata)
 
 #Model Prediction
-
-
-    # Load the saved Random Forest model
-    theIntellitweet = joblib.load('saved_models/intelliTweetModel.pkl')
     x_pred = resultdata[feature_columns]
     x_pred['sentiment_label'] = x_pred['sentiment_label'].replace(['Negative', 'Positive'], [1, 0])
     scale = StandardScaler()
