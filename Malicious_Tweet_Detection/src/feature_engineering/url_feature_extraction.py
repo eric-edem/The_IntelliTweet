@@ -50,42 +50,6 @@ class CheckUrlFeature():
             print("err_having_IP_Address", e)
             return 0
 
-    def URL_Length(url):
-        try:
-            length = len(url)
-            if (length < 54):
-                print("url length not long")
-                return -1
-
-            elif (54 <= length <= 75):
-                print("Url lenght moderate")
-                return 0
-
-            else:
-                print("Url lenght very long")
-                return 1
-
-        except Exception as e:
-            print("err_URL_length", e)
-            return 0
-
-    def Shortining_Service(url):
-        try:
-            subDomain, domain, suffix, e = extract(url)
-            subDomain2, domain2, suffix2, e = extract(requests.get(url, timeout=7).url)
-
-            if len(domain) < 4 or len(domain2) < 4:
-                print("Short url detected")
-                return 1
-
-            else:
-                print("No short url detected")
-                return -1
-
-        except Exception as e:
-            print("err_shortining_Service", e)
-            return 0
-
     def having_At_Symbol(url):
         try:
             symbol = regex.findall(r'@', url)
@@ -134,36 +98,6 @@ class CheckUrlFeature():
             print("err_having_Sub_Domain", e)
             return 0
 
-    def SSLfinal_State(url):
-        try:
-            if (regex.search('^https', url)):
-                usehttps = 1
-            else:
-                usehttps = 0
-                print("no https")
-            subDomain, domain, suffix, e = extract(url)
-            host_name = domain + "." + suffix
-            context = ssl.create_default_context()
-            sct = context.wrap_socket(socket.socket(), server_hostname=host_name)
-            sct.connect((host_name, 443))
-            certificate = sct.getpeercert()
-            print("CERTIFICATE:", certificate)
-            startingDate = str(certificate['notBefore'])
-            endingDate = str(certificate['notAfter'])
-            startingYear = int(startingDate.split()[3])
-            print("startingYear: ", startingYear)
-            endingYear = int(endingDate.split()[3])
-            print("endingYear: ", endingYear)
-            Age_of_certificate = endingYear - startingYear
-            if ((usehttps == 1) and (Age_of_certificate >= 1)):
-                return -1
-            else:
-                return 1
-                print("ssl faulty")
-        except Exception as e:
-            print("err_SSLfinal_State", e)
-            return 1
-
     def Domain_registeration_length(url):
         try:
             w = whois.whois(url)
@@ -182,28 +116,6 @@ class CheckUrlFeature():
         except Exception as e:
             print("err_Domain_registration_length", e)
             return 0
-
-    def Favicon(url):
-        try:
-            r = requests.get(url, timeout=7)
-            html = r.text
-
-            regex_favicon = '<link rel=".*?icon".*?href="(.*?)"'
-            regex_result = regex.findall(regex_favicon, html)
-            if len(regex_result) == 0:
-                return 1
-
-            favicon_url = regex_result[0]
-
-            url_domain = ".".join(extract(url)[1:3])
-            favicon_domain = ".".join(extract(favicon_url[1:3]))
-            if url_domain == favicon_domain:
-                return -1
-            else:
-                return 1
-        except Exception as e:
-            print("err_favicon", e)
-            return 1
 
     def port(url):
         try:
@@ -302,27 +214,6 @@ class CheckUrlFeature():
                 return 0
             else:
                 return 1
-        except Exception as e:
-            return 1
-
-    def Links_in_tags(url):
-        return -1
-
-    def SFH(url):
-        # MrNA
-        return -1
-
-    def Submitting_to_email(url):
-        # MrNA
-        return -1
-
-    def Abnormal_URL(url):
-        try:
-            w = whois.whois(url)
-            if w.domain_name == None:
-                return 1
-            else:
-                return -1
         except Exception as e:
             return 1
 
@@ -486,21 +377,6 @@ class CheckUrlFeature():
         except:
             return 0
 
-    def Links_pointing_to_page(url):  # backlinks
-        # proxyht
-        return -1
-
-    def Statistical_report(url):
-        # proxyht
-        df = pd.read_csv("zprops/Alexa.csv")
-        # f = open("model/data/urls.csv","r",encoding="UTF-8")
-        # data = f.read().split("\n")
-        data = df['Stats']
-
-        if url in data:
-            return 1
-        else:
-            return -1
 
 def fix_url(url_string):
     # Function to fix the URL format
@@ -524,23 +400,15 @@ def run(url):
     data = {}
     data['check_connection'] = CheckUrlFeature.check_connection(urll)
     data['having_IP_Address'] = CheckUrlFeature.having_IP_Address(urll)
-    data['URL_Length'] = CheckUrlFeature.URL_Length(urll)
-    data['Shortining_Service'] = CheckUrlFeature.Shortining_Service(urll)
     data['having_At_Symbol'] = CheckUrlFeature.having_At_Symbol(urll)
     data['double_slash_redirecting'] = CheckUrlFeature.double_slash_redirecting(urll)
     data['Prefix_Suffix'] = CheckUrlFeature.Prefix_Suffix(urll)
     data['having_Sub_Domain'] = CheckUrlFeature.having_Sub_Domain(urll)
-    data['SSLfinal_State'] = CheckUrlFeature.SSLfinal_State(urll)
     data['Domain_registeration_length'] = CheckUrlFeature.Domain_registeration_length(urll)
-    data['Favicon'] = CheckUrlFeature.Favicon(urll)
     data['port'] = CheckUrlFeature.port(urll)
     data['HTTPS_token'] = CheckUrlFeature.HTTPS_token(urll)
     data['Request_URL'] = CheckUrlFeature.Request_URL(urll)
     data['URL_of_Anchor'] = CheckUrlFeature.URL_of_Anchor(urll)
-    data['Links_in_tags'] = CheckUrlFeature.Links_in_tags(urll)
-    data['SFH'] = CheckUrlFeature.SFH(urll)
-    data['Submitting_to_email'] = CheckUrlFeature.Submitting_to_email(urll)
-    data['Abnormal_URL'] = CheckUrlFeature.Abnormal_URL(urll)
     data['Redirect'] = CheckUrlFeature.Redirect(urll)
     data['on_mouseover'] = CheckUrlFeature.on_mouseover(urll)
     data['RightClick'] = CheckUrlFeature.RightClick(urll)
@@ -551,7 +419,5 @@ def run(url):
     data['web_traffic'] = CheckUrlFeature.web_traffic(urll)
     data['Page_Rank'] = CheckUrlFeature.Page_Rank(urll)
     data['Google_Index'] = CheckUrlFeature.Google_Index(urll)
-    data['Links_pointing_to_page'] = CheckUrlFeature.Links_pointing_to_page(urll)
-    data['Statistical_report'] = CheckUrlFeature.Statistical_report(urll)
     data['URL'] = urll
     return data
