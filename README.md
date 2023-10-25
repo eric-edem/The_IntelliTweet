@@ -1,7 +1,7 @@
 # The_IntelliTweet
 A Multifaceted Feature Approach to Detect Malicious Tweets
 This repository corresponds to our research paper submitted to the FPS 2023 Conference under the title "IntelliTweet: a A Multifaceted Feature Approach to Detect Malicious Tweets".
-<img src="inteliTweet System Flow.png" alt="inteliTweet System Flow" title="inteliTweet System Flow">
+<img src="intelliTweet System Flow.png" alt="intelliTweet System Flow" title="intelliTweet System Flow">
 
 
   ## How to install
