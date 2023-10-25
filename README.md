@@ -1,7 +1,9 @@
 # The_IntelliTweet
 A Multifaceted Feature Approach to Detect Malicious Tweets
 This repository corresponds to our research paper submitted to the FPS 2023 Conference under the title "IntelliTweet: a A Multifaceted Feature Approach to Detect Malicious Tweets".
-  
+<img src="inteliTweet System Flow.png" alt="inteliTweet System Flow" title="inteliTweet System Flow">
+
+
   ## How to install
 You are required to install the following Python packages: nltk, whois, tldextract, fake-useragent, BeautifulSoup, pyquery, dnspython, pandas, dns, bs4, scikit-learn version 1.0.2, and itertools.
 
