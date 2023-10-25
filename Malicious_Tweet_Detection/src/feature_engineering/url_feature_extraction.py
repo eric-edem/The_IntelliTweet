@@ -186,7 +186,7 @@ class CheckUrlFeature():
             else:
                 return 1
         except Exception as e:
-            return 1
+            return 0
 
     def URL_of_Anchor(url):
         try:
@@ -212,7 +212,7 @@ class CheckUrlFeature():
             else:
                 return 1
         except Exception as e:
-            return 1
+            return 0
 
     def Redirect(url):
         try:
@@ -242,7 +242,7 @@ class CheckUrlFeature():
                 result = -1
             return result
         except Exception as e:
-            return 1
+            return 0
 
     def RightClick(url):
         try:
@@ -300,7 +300,7 @@ class CheckUrlFeature():
             else:
                 return 1
         except Exception as e:
-            return 1
+            return 0
 
     def DNSRecord(url):
         try:
