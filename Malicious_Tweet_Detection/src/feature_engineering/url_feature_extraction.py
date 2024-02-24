@@ -67,7 +67,7 @@ class CheckUrlFeature():
 
     def Prefix_Suffix(url):
         try:
-            subDomain, domain, suffix, e = extract(url)
+            subDomain, domain, suffix = extract(url)
             if (domain.count('-')):
                 print("Url has prefix")
                 return 1
@@ -80,7 +80,7 @@ class CheckUrlFeature():
 
     def having_Sub_Domain(url):
         try:
-            subDomain, domain, suffix, e = extract(url)
+            subDomain, domain, suffix = extract(url)
             if (subDomain.count('.') == 0):
                 return -1
             elif (subDomain.count('.') == 1):
@@ -116,7 +116,7 @@ class CheckUrlFeature():
 
     def port(url):
         try:
-            subDomain, domain, suffix, e = extract(url)
+            subDomain, domain, suffix = extract(url)
             host_name = domain + "." + suffix
             DEFAULT_TIMEOUT = 0.5
             open_port = []
@@ -144,7 +144,7 @@ class CheckUrlFeature():
 
     def HTTPS_token(url):
         try:
-            subDomain, domain, suffix, e = extract(url)
+            subDomain, domain, suffix = extract(url)
             host = subDomain + '.' + domain + '.' + suffix
             if (host.count('https')):
                 return 1
@@ -305,7 +305,7 @@ class CheckUrlFeature():
     def DNSRecord(url):
         try:
             try:
-                subDomain, domain, suffix, e = extract(url)
+                subDomain, domain, suffix = extract(url)
                 print(domain + "." + suffix)
                 result = dns.resolver.query(domain + "." + suffix, 'A')
                 print(result)
@@ -320,20 +320,30 @@ class CheckUrlFeature():
             return 0
 
     def web_traffic(url):
-        try:
+    try:
+        subDomain, domain, suffix = extract(url)
+            
+        host_name = domain + "." + suffix
+    
+        # Load the Alexa CSV file into a DataFrame
+        alexa_data = pd.read_csv('alexa_domains.csv')
 
-            soup = bs4.BeautifulSoup(urlopen('http://data.alexa.com/data?cli=10&dat=snbamz&url=' + url).read(),
-                                     features="html.parser")
-            if not hasattr(soup.popularity, 'text'):
-                return 1
+        # Find the rank for the given URL
+        rank_info = alexa_data[alexa_data['domains'] == host_name]
 
-            rank = int(soup.popularity['text'])
-            if rank < 100000:
-                return -1
-            else:
-                return 1
-        except Exception as e:
-            return 0
+        # Check if the URL exists in the Alexa data
+        if rank_info.empty:
+            return 1
+
+        # Extract the rank value
+        rank = rank_info.index[0]
+
+        if rank < 100000:
+            return -1
+        else:
+            return 1
+    except Exception as e:
+        return 0
 
     def Page_Rank(url):
         try:
