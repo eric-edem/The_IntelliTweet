@@ -326,10 +326,10 @@ class CheckUrlFeature():
         host_name = domain + "." + suffix
     
         # Load the Alexa CSV file into a DataFrame
-        alexa_data = pd.read_csv('alexa_domains.csv')
+        alexa_data = pd.read_csv('top-1m.csv')
 
         # Find the rank for the given URL
-        rank_info = alexa_data[alexa_data['domains'] == host_name]
+        rank_info = alexa_data[alexa_data['domain'] == host_name]
 
         # Check if the URL exists in the Alexa data
         if rank_info.empty:
