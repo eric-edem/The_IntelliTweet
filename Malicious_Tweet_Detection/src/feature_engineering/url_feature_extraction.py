@@ -357,6 +357,27 @@ class CheckUrlFeature():
         except Exception as e:
             return 0
 
+    def Favicon(url):
+        try:
+            r = requests.get(url, timeout=7)
+            html = r.text
+
+            regex_favicon = '<link rel=".*?icon".*?href="(.*?)"'
+            regex_result = regex.findall(regex_favicon, html)
+            if len(regex_result) == 0:
+                return 1
+
+            favicon_url = regex_result[0]
+            url_domain = ".".join(extract(url)[1:3])
+            favicon_domain = ".".join(extract(favicon_url[1:3]))
+            if url_domain == favicon_domain:
+                return -1
+            else:
+                return 1
+        except Exception as e:
+            print("err_favicon", e)
+            return 1
+
     def Page_Rank(url):
         try:
             # Extract subdomain, domain, and top-level domain from the URL
@@ -448,6 +469,7 @@ def run(url):
     data['age_of_domain'] = CheckUrlFeature.age_of_domain(urll)
     data['DNSRecord'] = CheckUrlFeature.DNSRecord(urll)
     data['web_traffic'] = CheckUrlFeature.web_traffic(urll)
+    data['Favicon'] = CheckUrlFeature.Favicon(urll)
     data['Page_Rank'] = CheckUrlFeature.Page_Rank(urll)
     data['Google_Index'] = CheckUrlFeature.Google_Index(urll)
     data['URL'] = urll
